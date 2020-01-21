@@ -6,6 +6,7 @@ using AverySample.Models;
 using AverySample.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 
 namespace AverySample.Controllers
 {
@@ -23,6 +24,9 @@ namespace AverySample.Controllers
 
         [HttpGet]
         [Route("total")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [OpenApiTags("revenue")]
         public ActionResult<TotalRevenue> TotalRevenue([FromQuery(Name = "fromDate")]string from, [FromQuery(Name = "toDate")]string to)
         {
             return Execute(from, to, _revenueService.TotalRevenueByDay);
@@ -30,6 +34,9 @@ namespace AverySample.Controllers
 
         [HttpGet]
         [Route("grouped")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [OpenApiTags("revenue")]
         public ActionResult<RevenueData> RevenueByArticle([FromQuery(Name = "fromDate")]string from, [FromQuery(Name = "toDate")]string to)
         {
             return Execute(from, to, _revenueService.RevenueByArticle);

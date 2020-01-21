@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AverySample.Data;
 using AverySample.Models;
+using NSwag.Annotations;
 
 namespace AverySample.Controllers
 {
@@ -21,31 +22,13 @@ namespace AverySample.Controllers
             _context = context;
         }
 
-        // GET: api/ArticleSaleDatas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ArticleSaleData>>> GetArticleSaleData()
-        {
-            return await _context.ArticleSaleData.ToListAsync();
-        }
-
-        // GET: api/ArticleSaleDatas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ArticleSaleData>> GetArticleSaleData(long id)
-        {
-            var articleSaleData = await _context.ArticleSaleData.FindAsync(id);
-
-            if (articleSaleData == null)
-            {
-                return NotFound();
-            }
-
-            return articleSaleData;
-        }
-
-        // POST: api/ArticleSaleDatas
+        // POST: api/v1/ArticleSaleDatas
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [OpenApiTags("sales")]
         public async Task<ActionResult<ArticleSaleData>> PostArticleSaleData(ArticleSaleData articleSaleData)
         {
             _context.ArticleSaleData.Add(articleSaleData);
