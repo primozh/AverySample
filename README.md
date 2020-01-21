@@ -28,11 +28,15 @@ You can run service directly.
 dotnet run
 ```
 
+## OpenApi
+
+OpenApi specs are available via Swagger UI: `http://<host>:<port>/swagger` e.g. [http://localhost:5000/swagger](http://localhost:5000/swagger).
+
 ## Notes
 
-This app is fairly simple and implemented in a rather dummy way. 
-It uses in memory database, so data is lost on every restart. Also stats are calculated on the fly and no cache is used.
-Error handling, code style and management could be better and more C#-like. Tests are currently not included due to time constraints.
+This app is fairly simple and implemented in a rather dummy way.
+It uses an in-memory database, so data is lost on every restart. Also stats are calculated on the fly and no cache is used.
+Error handling is not properly implemented, code style and management could be better and more C#-like. Tests are currently not included due to time constraints.
 Better way to tackle this problem is by using time series database with live data aggregation and processing (DW-like functionalities).
 Also, additional constraints and data validation should be done to further prevent non parsable and consequently corrupted data.
 
