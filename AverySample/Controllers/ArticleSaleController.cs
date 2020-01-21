@@ -24,6 +24,9 @@ namespace AverySample.Controllers
 
         // GET: api/ArticleSaleDatas/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [OpenApiTags("sales")]
         public async Task<ActionResult<ArticleSale>> GetArticleSaleData(long id)
         {
             var articleSaleData = await _context.ArticleSaleData.FindAsync(id);
@@ -41,7 +44,6 @@ namespace AverySample.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [OpenApiTags("sales")]
         public async Task<ActionResult<ArticleSale>> PostArticleSaleData(ArticleSale articleSaleData)
         {
