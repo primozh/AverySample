@@ -8,7 +8,7 @@ namespace AverySample.Services
 {
     public interface IRevenueService
     {
-        TotalRevenue totalRevenueByDay(DateTime? from, DateTime? to);
+        TotalRevenue TotalRevenueByDay(DateTime? from, DateTime? to);
         RevenueData RevenueByArticle(DateTime? from, DateTime? to);
     }
 }

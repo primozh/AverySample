@@ -25,12 +25,17 @@ namespace AverySample.Controllers
         [Route("total")]
         public ActionResult<TotalRevenue> TotalRevenue([FromQuery(Name = "fromDate")]string from, [FromQuery(Name = "toDate")]string to)
         {
-            return NoContent();
+            return Execute(from, to, _revenueService.TotalRevenueByDay);
         }
 
         [HttpGet]
         [Route("grouped")]
         public ActionResult<RevenueData> RevenueByArticle([FromQuery(Name = "fromDate")]string from, [FromQuery(Name = "toDate")]string to)
+        {
+            return Execute(from, to, _revenueService.RevenueByArticle);
+        }
+
+        private ActionResult<T> Execute<T>(string from, string to, Func<DateTime?, DateTime?, T> function)
         {
             try
             {
@@ -41,16 +46,16 @@ namespace AverySample.Controllers
                 {
                     return BadRequest();
                 }
-                return _revenueService.RevenueByArticle(fromDate, toDate);
-            } 
+                return function(fromDate, toDate);
+            }
             catch (ArgumentNullException e)
             {
                 if (from == null && to != null || from != null && to == null)
                 {
                     return BadRequest();
                 }
-                return _revenueService.RevenueByArticle(null, null);
-            } 
+                return function(null, null);
+            }
             catch (FormatException e)
             {
                 return BadRequest();

@@ -22,8 +22,8 @@ namespace AverySample.Services
 
         public RevenueData RevenueByArticle(DateTime? from, DateTime? to)
         {
-            var fromDate = from?.Date ?? DateTime.Now.Date.AddDays(_numDays);
-            var toDate = to?.Date ?? DateTime.Now.Date;
+            DateTime fromDate, toDate;
+            ExtractDate(from, to, out fromDate, out toDate);
 
             var queryable =
                 _context.ArticleSaleData
@@ -47,7 +47,7 @@ namespace AverySample.Services
                 foreach (var data in article.list)
                 {
                     dataRange.TryGetValue(data.Date.ToShortDateString(), out var found);
-                    
+
                     if (found != null)
                     {
                         found.TryGetValue(data.ArticleId, out var foundArticle);
@@ -56,7 +56,8 @@ namespace AverySample.Services
                         {
                             foundArticle.count++;
                             foundArticle.total += data.Price;
-                        } else
+                        }
+                        else
                         {
                             found.Add(data.ArticleId, new RevenueItem { count = 1, total = data.Price });
                         }
@@ -70,9 +71,32 @@ namespace AverySample.Services
             return new RevenueData() { Count = totalCount, TotalRevenue = totalRevenue, Data = dataRange };
         }
 
-        public TotalRevenue totalRevenueByDay(DateTime? from, DateTime? to)
+        public TotalRevenue TotalRevenueByDay(DateTime? from, DateTime? to)
         {
-            throw new NotImplementedException();
+            ExtractDate(from, to, out var fromDate, out var toDate);
+            var queryable =
+                _context.ArticleSaleData
+                // client side querying (inmemory db)
+                .AsEnumerable()
+                .Where(article => article.Date.Date.CompareTo(fromDate) >= 0 && article.Date.Date.CompareTo(toDate) < 0)
+                .GroupBy(a => a.Date,
+                a => a.Price,
+                (key, value) => new { Date = key, Revenue = value.Sum() });
+
+            var totalRevenue = new TotalRevenue();
+            foreach (var data in queryable)
+            {
+                totalRevenue.Revenue.Add(new TotalRevenueItem() { Date = data.Date, Sum = data.Revenue });
+                totalRevenue.Total += data.Revenue;
+            }
+
+            return totalRevenue;
+        }
+
+        private void ExtractDate(DateTime? from, DateTime? to, out DateTime fromDate, out DateTime toDate)
+        {
+            fromDate = from?.Date ?? DateTime.Now.Date.AddDays(_numDays);
+            toDate = to?.Date ?? DateTime.Now.Date;
         }
     }
 }
