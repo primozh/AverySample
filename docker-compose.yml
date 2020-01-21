@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  averysample:
+    image: ${DOCKER_REGISTRY-}averysample
+    build:
+      context: .
+      dockerfile: AverySample/Dockerfile
+    ports:
+    - 5000:80
