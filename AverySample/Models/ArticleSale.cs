@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AverySample.Models
 {
-    public class ArticleSaleData
+    public class ArticleSale
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

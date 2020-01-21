@@ -14,6 +14,6 @@ namespace AverySample.Data
         {
         }
 
-        public DbSet<AverySample.Models.ArticleSaleData> ArticleSaleData { get; set; }
+        public DbSet<AverySample.Models.ArticleSale> ArticleSaleData { get; set; }
     }
 }
